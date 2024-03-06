@@ -12,16 +12,49 @@
     </header>
     <main>
         <nav class="menu">
-            <div class="categories">
-                <button class="btn-task-category" id="btn-all-tasks">All tasks</button>
-                <button class="btn-task-category" id="btn-today-tasks">Today</button>
+            <div class="category-section">
+                <button class="btn btn-task-category" id="btn-all-tasks">All tasks</button>
+                <button class="btn btn-task-category" id="btn-today-tasks">Today</button>
             </div>
-            <div class="projects">
+            <div class="project-section">
                 <h2>Projects</h2>
-                <button class="btn-project" id="btn-add-project">Add new project</button>
+                <div class="current-projects"></div>
+                <button class="btn btn-project" id="btn-add-project">Add new project</button>
+                <form class="add-project-form">
+                    <input type="text" id="input-project-title" placeholder="Enter project title">
+                    <div class="add-project-buttons">
+                        <input type="submit" id="btn-submit-project" value="Submit" class="btn btn-form">
+                        <button id="btn-cancel-project" class="btn btn-form">Cancel</button>
+                    </div>
+                </form>
             </div>
         </nav>
-        <div class="task-list"></div>
+        <div class="task-list">
+            <h2 class="task-list-name">All tasks</h2>
+            <div class="task-list-content">
+                <form class="add-task-form">
+                    <label for="input-task-title">Title</label>
+                    <input type="text" id="input-task-title">
+                    <div class="input-task-priority">
+                        <label for="task-priority">Priority</label>
+                        <input type="radio" id="task-priority-low" name="task-priority">
+                        <label for="task-priority-low">low</label>
+                        <input type="radio" id="task-priority-medium" name="task-priority">
+                        <label for="task-priority-medium">medium</label>
+                        <input type="radio" id="task-priority-high" name="task-priority">
+                        <label for="task-priority-high">high</label>
+                    </div>
+                    <label for="input-task-date">Date</label>
+                    <input type="date" id="input-task-date">
+                    <label for="input-task-description">Description</label>
+                    <input type="text" id="input-task-description">
+                    <div class="add-task-buttons">
+                        <input type="submit" id="btn-submit-task" value="Submit" class="btn btn-form">
+                        <button id="btn-cancel-task" class="btn btn-form">Cancel</button> 
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
     <footer>
         <p>Created by
