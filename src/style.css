@@ -43,18 +43,18 @@ main {
     background-color: var(--bg-light);
 }
 
-.categories,
-.projects {
+.category-section,
+.project-section {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-button {
+/* .btn {
     border: none;
     padding: 10px;
     background-color: inherit;
-}
+} */
 
 /* TASK LIST */
 
