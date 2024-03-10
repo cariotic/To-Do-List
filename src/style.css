@@ -24,7 +24,7 @@ header {
     display: flex;
     justify-content: center;
     padding: 32px 0;
-    background-color: var(--bg-light);
+    background-color: var(--accent-light);
 }
 
 main {
@@ -39,8 +39,9 @@ main {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    width: 200px;
+    width: 300px;
     background-color: var(--bg-light);
+    padding: 20px;
 }
 
 .category-section,
@@ -48,6 +49,16 @@ main {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.project {
+    padding: 0 8px;
 }
 
 /* ADD PROJECT FORM */
@@ -78,6 +89,7 @@ main {
     background-color: var(--bg-dark);
     width: 100%;
     height: 100%;
+    padding: 20px;
 }
 
 footer {

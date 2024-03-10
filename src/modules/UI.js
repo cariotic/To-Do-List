@@ -1,17 +1,36 @@
+import StorageHandler from "./StorageHandler";
+import Project from "./Project";
+
 export default class UI {
     constructor() {
 
     }
 
     static loadContent() {
+        UI.loadProjects();
         UI.initButtons();
+    }
+
+    static loadProjects() {
+        const projectList = document.querySelector('.project-list');
+        const savedProjects = StorageHandler.getProjectList();          // returns array of objects of type Project
+
+        savedProjects.forEach(element => {
+            const project = document.createElement('div');
+            const projectTitle = document.createElement('p');
+
+            project.classList.add('project');
+            projectTitle.classList.add('project-title');
+            projectTitle.textContent = element.title;
+            project.append(projectTitle);
+            projectList.append(project);
+        });
     }
 
     static initButtons() {
         UI.initFilterButtons();
         UI.initProjectButtons();
         UI.initTaskButtons();
-        
     }
 
     static initFilterButtons() {
@@ -53,19 +72,52 @@ export default class UI {
     }
 
     static submitProjectCreation() {
-        // TODO: read & validate input from add-project-form
+        const inputProjectTitle = document.querySelector('#input-project-title');
+        if(!inputProjectTitle.value) {
+            alert('You must enter project title');
+            return;
+        }
+        else if(StorageHandler.getProject(inputProjectTitle.value)){
+            alert('Project of this title already exists');
+            return;
+        }
+
+        StorageHandler.saveProject(new Project(inputProjectTitle.value));
+
+        const projectList = document.querySelector('.project-list');
+
+        const project = document.createElement('div');
+        const projectTitle = document.createElement('p');
+
+        projectTitle.textContent = inputProjectTitle.value;
+        project.append(projectTitle);
+        projectList.append(project);
+
+        UI.hideAddProjectForm();
     }
 
     static cancelProjectCreation() {
         const inputProjectTitle = document.querySelector('#input-project-title');
         const addProjectForm = document.querySelector('.add-project-form');
 
-        inputProjectTitle.textContent = '';
-        addProjectForm.classList.remove('show');
+        inputProjectTitle.value = '';
+        UI.hideAddProjectForm();
     }
 
     static submitTaskCreation() {
         // TODO: read & validate input from add-task-form
+        const inputTaskTitle = document.querySelector('#input-task-title');
+        if(!inputTaskTitle.value) {
+            alert('You must enter task title');
+            return;
+        }
+
+        const dueDate = document.querySelector('#input-task-date');
+        const priority = document.querySelector('input[name="task-priority"]:checked');
+        const description = document.querySelector('#input-task-description');
+        StorageHandler.saveTask(new Task(inputTaskTitle.value, dueDate.value, priority.value, description.value));
+    
+        UI.hideAddTaskForm();
     }
 
     static cancelTaskCreation() {
@@ -75,11 +127,21 @@ export default class UI {
 
         inputTaskTitle.textContent = '';
         inputTaskDescription.textContent = '';
-        addTaskForm.classList.remove('show');
+        UI.hideAddTaskForm();
     }
 
     static filterTaskList(filterName) {
         // TODO: filter tasks by date
+    }
+
+    static hideAddProjectForm() {
+        const addProjectForm = document.querySelector('.add-project-form');
+        addProjectForm.classList.remove('show');
+    }
+
+    static hideAddTaskForm() {
+        const addTaskForm = document.querySelector('.add-task-form');
+        addTaskForm.classList.remove('show');
     }
     
 }
