@@ -58,7 +58,12 @@ main {
 }
 
 .project {
-    padding: 0 8px;
+    padding: 4px 8px;
+}
+
+.project:hover {
+    background-color: var(--bg-dark);
+    cursor: pointer;
 }
 
 /* ADD PROJECT FORM */

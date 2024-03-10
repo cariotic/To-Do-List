@@ -1,5 +1,7 @@
 import StorageHandler from "./StorageHandler";
 import Project from "./Project";
+import Task from "./Task";
+import { format } from "date-fns";
 
 export default class UI {
     constructor() {
@@ -8,6 +10,7 @@ export default class UI {
 
     static loadContent() {
         UI.loadProjects();
+        UI.loadTasks();
         UI.initButtons();
     }
 
@@ -25,6 +28,33 @@ export default class UI {
             project.append(projectTitle);
             projectList.append(project);
         });
+        UI.initChooseProjectButtons();
+    }
+
+    static loadTasks(projectTitle) {
+        UI.hideTasks();
+        const taskList = document.querySelector('.task-list');
+        const storedTasks = StorageHandler.getTaskList(projectTitle);
+
+        if(!storedTasks) {
+            return;
+        }
+
+        storedTasks.forEach(element => {
+            const task = document.createElement('div');
+            const taskTitle = document.createElement('p');
+
+            task.classList.add('task');
+            taskTitle.classList.add('task-title');
+            taskTitle.textContent = element.title;
+            task.append(taskTitle);
+            taskList.append(task);
+        });
+    }
+
+    static hideTasks() {
+        const taskList = document.querySelector('.task-list');
+        taskList.innerHTML = '';
     }
 
     static initButtons() {
@@ -49,6 +79,12 @@ export default class UI {
         btnAddProject.addEventListener('click', UI.showAddProjectForm);
         btnSubmitProjectCreation.addEventListener('click', UI.submitProjectCreation);
         btnCancelProjectCreation.addEventListener('click', UI.cancelProjectCreation);
+        UI.initChooseProjectButtons();
+    }
+
+    static initChooseProjectButtons() {
+        const projectListBtns = document.querySelectorAll('.project');
+        projectListBtns.forEach((btn) => {btn.addEventListener('click', UI.chooseProject)});
     }
 
     static initTaskButtons() {
@@ -71,6 +107,13 @@ export default class UI {
         addTaskForm.classList.add('show');
     }
 
+    static chooseProject(e) {
+        const taskListHeader = document.querySelector('.task-list-name');
+        taskListHeader.textContent = e.target.textContent;
+
+        UI.loadTasks(taskListHeader.textContent);
+    }
+
     static submitProjectCreation() {
         const inputProjectTitle = document.querySelector('#input-project-title');
         if(!inputProjectTitle.value) {
@@ -89,41 +132,45 @@ export default class UI {
         const project = document.createElement('div');
         const projectTitle = document.createElement('p');
 
+        project.classList.add('project');
+        projectTitle.classList.add('project-title');
         projectTitle.textContent = inputProjectTitle.value;
         project.append(projectTitle);
         projectList.append(project);
+        project.addEventListener('click', UI.chooseProject);
 
         UI.hideAddProjectForm();
     }
 
     static cancelProjectCreation() {
         const inputProjectTitle = document.querySelector('#input-project-title');
-        const addProjectForm = document.querySelector('.add-project-form');
 
         inputProjectTitle.value = '';
         UI.hideAddProjectForm();
     }
 
     static submitTaskCreation() {
-        // TODO: read & validate input from add-task-form
         const inputTaskTitle = document.querySelector('#input-task-title');
         if(!inputTaskTitle.value) {
             alert('You must enter task title');
             return;
         }
 
-        const dueDate = document.querySelector('#input-task-date');
+        const inputDueDate = document.querySelector('#input-task-date');
         const priority = document.querySelector('input[name="task-priority"]:checked');
         const description = document.querySelector('#input-task-description');
-        StorageHandler.saveTask(new Task(inputTaskTitle.value, dueDate.value, priority.value, description.value));
+        const projectTitle = document.querySelector('.task-list-name').textContent;
+
+        const dueDate = format(new Date(inputDueDate.value), 'dd/MM/yyyy');
+        StorageHandler.saveTask(projectTitle, new Task(inputTaskTitle.value, dueDate, priority.value, description.value));
     
         UI.hideAddTaskForm();
+        UI.loadTasks(projectTitle);
     }
 
     static cancelTaskCreation() {
         const inputTaskTitle = document.querySelector('#input-task-title');
         const inputTaskDescription = document.querySelector('#input-task-description');
-        const addTaskForm = document.querySelector('.add-task-form');
 
         inputTaskTitle.textContent = '';
         inputTaskDescription.textContent = '';
