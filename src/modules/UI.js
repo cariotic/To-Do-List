@@ -58,7 +58,7 @@ export default class UI {
     }
 
     static initButtons() {
-        UI.initFilterButtons();
+        //UI.initFilterButtons();
         UI.initProjectButtons();
         UI.initTaskButtons();
     }
@@ -97,20 +97,12 @@ export default class UI {
         btnCancelTaskCreation.addEventListener('click', UI.cancelTaskCreation);
     }
 
-    static showAddProjectForm() {
-        const addProjectForm = document.querySelector('.add-project-form');
-        addProjectForm.classList.add('show');
-    }
-
-    static showAddTaskForm() {
-        const addTaskForm = document.querySelector('.add-task-form');
-        addTaskForm.classList.add('show');
-    }
-
     static chooseProject(e) {
-        const taskListHeader = document.querySelector('.task-list-name');
+        UI.showTaskListTitle();
+        const taskListHeader = document.querySelector('#task-list-title');
         taskListHeader.textContent = e.target.textContent;
 
+        
         UI.loadTasks(taskListHeader.textContent);
     }
 
@@ -120,7 +112,7 @@ export default class UI {
             alert('You must enter project title');
             return;
         }
-        else if(StorageHandler.getProject(inputProjectTitle.value)){
+        if(StorageHandler.getProject(inputProjectTitle.value)){
             alert('Project of this title already exists');
             return;
         }
@@ -151,16 +143,23 @@ export default class UI {
 
     static submitTaskCreation() {
         const inputTaskTitle = document.querySelector('#input-task-title');
+        const projectTitle = document.querySelector('#task-list-title').textContent;
+
+        if(!projectTitle) {
+            alert('You must choose project');
+            this.hideAddTaskForm();
+            return;
+        }
         if(!inputTaskTitle.value) {
             alert('You must enter task title');
+            this.hideAddTaskForm();
             return;
         }
 
         const inputDueDate = document.querySelector('#input-task-date');
         const priority = document.querySelector('input[name="task-priority"]:checked');
         const description = document.querySelector('#input-task-description');
-        const projectTitle = document.querySelector('.task-list-name').textContent;
-
+        
         const dueDate = format(new Date(inputDueDate.value), 'dd/MM/yyyy');
         StorageHandler.saveTask(projectTitle, new Task(inputTaskTitle.value, dueDate, priority.value, description.value));
     
@@ -181,14 +180,56 @@ export default class UI {
         // TODO: filter tasks by date
     }
 
+    static showAddProjectForm() {
+        const addProjectForm = document.querySelector('.add-project-form');
+        addProjectForm.classList.add('show');
+    }
+
     static hideAddProjectForm() {
         const addProjectForm = document.querySelector('.add-project-form');
         addProjectForm.classList.remove('show');
+        UI.resetAddProjectForm();
+    }
+
+    static resetAddProjectForm() {
+        const inputProjectTitle = document.querySelector('#input-project-title');
+        inputProjectTitle.value = '';
+    }
+
+    static showAddTaskForm() {
+        const addTaskForm = document.querySelector('.add-task-form');
+        addTaskForm.classList.add('show');
+
+        const inputDueDate = document.querySelector('#input-task-date');
+        inputDueDate.value = new Date().toISOString().slice(0, 10);
     }
 
     static hideAddTaskForm() {
         const addTaskForm = document.querySelector('.add-task-form');
         addTaskForm.classList.remove('show');
+        UI.resetAddTaskForm();
+    }
+
+    static resetAddTaskForm() {
+        const inputTaskTitle = document.querySelector('#input-task-title');
+        const inputDueDate = document.querySelector('#input-task-date');
+        const taskPriorityLowRadio = document.querySelector('#task-priority-low');
+        const description = document.querySelector('#input-task-description');
+
+        inputTaskTitle.value = '';
+        inputDueDate.value = new Date().toISOString().slice(0, 10);
+        taskPriorityLowRadio.checked = true;
+        description.value = '';
+    }
+
+    static showTaskListTitle() {
+        const taskListTitle = document.querySelector('#task-list-title');
+        taskListTitle.style.display = 'block';
+    }
+
+    static hideTaskListTitle() {
+        const taskListTitle = document.querySelector('#task-list-title');
+        taskListTitle.style.display = 'none';
     }
     
 }
