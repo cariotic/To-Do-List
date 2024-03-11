@@ -17,7 +17,6 @@ export default class StorageHandler {
     }
 
     static getProject(projectTitle) {
-        console.log(projectTitle);
         const projectList = StorageHandler.getProjectList();
         let project = {};
 
@@ -35,8 +34,7 @@ export default class StorageHandler {
 
     static updateProject(project) {
         const idx = StorageHandler.deleteProject(project.title);
-
-        if(!idx) {
+        if(idx < 0) {
             return;
         }
 
@@ -47,13 +45,24 @@ export default class StorageHandler {
 
     static deleteProject(projectTitle) {
         const projectList = StorageHandler.getProjectList();
-        const projectToDelete = StorageHandler.getProject(projectTitle);
+        let projectToDelete = {};
 
-        if(!projectToDelete) {
+        if(!projectList) {
             return -1;
         }
+
+        projectToDelete = projectList.find(({title}) => title === projectTitle);
+
+        if(projectToDelete === undefined) {
+            return -1;
+        }
+
+        const deletedIdx = projectList.indexOf(projectToDelete);
         
-        const deletedIdx = projectList.indexOf(projectToDelete)
+        if(deletedIdx < 0){
+            return -1;
+        }
+
         projectList.splice(deletedIdx, 1);
         localStorage.setItem('projectList', JSON.stringify(projectList));
         return deletedIdx;
@@ -66,7 +75,6 @@ export default class StorageHandler {
             alert('No project of this title');
             return;
         }
-
         project.taskList.push(task);
         this.updateProject(project);
     }
@@ -76,7 +84,6 @@ export default class StorageHandler {
         if(!project) {
             return null;
         }
-        console.log(project.taskList);
         return project.taskList;
     }
 }
