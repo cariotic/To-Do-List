@@ -147,21 +147,21 @@ export default class UI {
 
         if(!projectTitle) {
             alert('You must choose project');
-            this.hideAddTaskForm();
+            UI.hideAddTaskForm();
             return;
         }
         if(!inputTaskTitle.value) {
             alert('You must enter task title');
-            this.hideAddTaskForm();
+            UI.hideAddTaskForm();
             return;
         }
 
         const inputDueDate = document.querySelector('#input-task-date');
-        const priority = document.querySelector('input[name="task-priority"]:checked');
-        const description = document.querySelector('#input-task-description');
+        //const priority = document.querySelector('input[name="task-priority"]:checked');
+        //const description = document.querySelector('#input-task-description');
         
         const dueDate = format(new Date(inputDueDate.value), 'dd/MM/yyyy');
-        StorageHandler.saveTask(projectTitle, new Task(inputTaskTitle.value, dueDate, priority.value, description.value));
+        StorageHandler.saveTask(projectTitle, new Task(inputTaskTitle.value, dueDate,));
     
         UI.hideAddTaskForm();
         UI.loadTasks(projectTitle);
@@ -169,10 +169,10 @@ export default class UI {
 
     static cancelTaskCreation() {
         const inputTaskTitle = document.querySelector('#input-task-title');
-        const inputTaskDescription = document.querySelector('#input-task-description');
+        //const inputTaskDescription = document.querySelector('#input-task-description');
 
         inputTaskTitle.textContent = '';
-        inputTaskDescription.textContent = '';
+        //inputTaskDescription.textContent = '';
         UI.hideAddTaskForm();
     }
 
@@ -213,13 +213,13 @@ export default class UI {
     static resetAddTaskForm() {
         const inputTaskTitle = document.querySelector('#input-task-title');
         const inputDueDate = document.querySelector('#input-task-date');
-        const taskPriorityLowRadio = document.querySelector('#task-priority-low');
-        const description = document.querySelector('#input-task-description');
+        //const taskPriorityLowRadio = document.querySelector('#task-priority-low');
+        //const description = document.querySelector('#input-task-description');
 
         inputTaskTitle.value = '';
         inputDueDate.value = new Date().toISOString().slice(0, 10);
-        taskPriorityLowRadio.checked = true;
-        description.value = '';
+        //taskPriorityLowRadio.checked = true;
+        //description.value = '';
     }
 
     static showTaskListTitle() {

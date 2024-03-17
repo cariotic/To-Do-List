@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Viga&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1f6c56731b.js" crossorigin="anonymous"></script>
     <script src="main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>To-Do List</h1>
+        <i class="fa-solid fa-list-check"></i>
+        <h1 class="page-title">To-Do List</h1>
     </header>
     <main>
         <nav class="menu">
@@ -25,6 +30,7 @@
                 <div class="project-list"></div>
 
                 <div class="btn btn-project" id="btn-add-project">
+                    <i class="fa-solid fa-square-plus"></i>
                     <p>add new project</p>
                 </div>
                 <form class="add-project-form">
@@ -41,12 +47,13 @@
             <div class="task-list"></div>
 
             <div class="btn btn-task" id="btn-add-task">
+                <i class="fa-solid fa-square-plus"></i>
                 <p>add new task</p>
             </div>
             <form class="add-task-form">
                 <label for="input-task-title">Title</label>
                 <input type="text" id="input-task-title">
-                <div class="input-task-priority">
+                <!-- <div class="input-task-priority">
                     <label>Priority</label>
                     <input type="radio" name="task-priority" id="task-priority-low" value="low" checked>
                     <label for="task-priority-low">low</label>
@@ -54,11 +61,11 @@
                     <label for="task-priority-medium">medium</label>
                     <input type="radio" name="task-priority" id="task-priority-high" value="high">
                     <label for="task-priority-high">high</label>
-                </div>
-                <label for="input-task-date">Date</label>
+                </div> -->
+                <label for="input-task-date">Due date</label>
                 <input type="date" id="input-task-date">
-                <label for="input-task-description">Description</label>
-                <input type="text" id="input-task-description">
+                <!-- <label for="input-task-description">Description</label>
+                <input type="text" id="input-task-description"> -->
                 <div class="add-task-buttons">
                     <button type="button" id="btn-submit-task" class="btn btn-form">Add</button>
                     <button type="button" id="btn-cancel-task" class="btn btn-form">Cancel</button> 
