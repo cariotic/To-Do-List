@@ -71,7 +71,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    width: 300px;
+    width: 500px;
     background-color: var(--bg-light);
     padding: 20px;
 }
@@ -90,8 +90,20 @@ header {
 }
 
 .project {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px;
     border-radius: 4px;
+}
+
+.fa-trash {
+    color: var(--dark-brown);
+}
+
+.fa-trash:hover {
+    filter: brightness(0.70);
+    cursor: pointer;
 }
 
 .project:hover,
@@ -120,11 +132,20 @@ header {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    max-width: 1000px;
 }
 
 .task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
     padding: 8px;
     border-radius: 4px;
+}
+
+.task:hover {
+    background-color: var(--bg-light);
 }
 
 /* FORMS */

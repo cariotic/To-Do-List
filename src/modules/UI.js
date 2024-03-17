@@ -15,20 +15,31 @@ export default class UI {
     }
 
     static loadProjects() {
+        UI.hideProjects();
         const projectList = document.querySelector('.project-list');
         const savedProjects = StorageHandler.getProjectList();          // returns array of objects of type Project
 
         savedProjects.forEach(element => {
             const project = document.createElement('div');
             const projectTitle = document.createElement('p');
+            const deleteIcon = document.createElement('i');
 
             project.classList.add('project');
             projectTitle.classList.add('project-title');
+            deleteIcon.classList.add('fa-solid');
+            deleteIcon.classList.add("fa-trash");
             projectTitle.textContent = element.title;
             project.append(projectTitle);
+            project.append(deleteIcon);
             projectList.append(project);
         });
         UI.initChooseProjectButtons();
+        UI.initDeleteProjectButtons();
+    }
+
+    static hideProjects() {
+        const projectList = document.querySelector('.project-list');
+        projectList.innerHTML = '';
     }
 
     static loadTasks(projectTitle) {
@@ -43,11 +54,15 @@ export default class UI {
         storedTasks.forEach(element => {
             const task = document.createElement('div');
             const taskTitle = document.createElement('p');
+            const deleteIcon = document.createElement('i');
 
             task.classList.add('task');
             taskTitle.classList.add('task-title');
+            deleteIcon.classList.add('fa-solid');
+            deleteIcon.classList.add("fa-trash");
             taskTitle.textContent = element.title;
             task.append(taskTitle);
+            task.append(deleteIcon);
             taskList.append(task);
         });
     }
@@ -87,6 +102,11 @@ export default class UI {
         projectListBtns.forEach((btn) => {btn.addEventListener('click', UI.chooseProject)});
     }
 
+    static initDeleteProjectButtons() {
+        const deleteBtns = document.querySelectorAll('.project .fa-trash');
+        deleteBtns.forEach((btn) => {btn.addEventListener('click', UI.deleteProject)});
+    }
+
     static initTaskButtons() {
         const btnAddTask = document.querySelector('#btn-add-task');
         const btnSubmitTaskCreation = document.querySelector('#btn-submit-task');
@@ -97,11 +117,15 @@ export default class UI {
         btnCancelTaskCreation.addEventListener('click', UI.cancelTaskCreation);
     }
 
+    static initDeleteTaskButtons() {
+        const deleteBtns = document.querySelectorAll('.task .fa-trash');
+        deleteBtns.forEach((btn) => {btn.addEventListener('click', UI.deleteTask)});
+    }
+
     static chooseProject(e) {
         UI.showTaskListTitle();
         const taskListHeader = document.querySelector('#task-list-title');
         taskListHeader.textContent = e.target.textContent;
-
         
         UI.loadTasks(taskListHeader.textContent);
     }
@@ -123,11 +147,15 @@ export default class UI {
 
         const project = document.createElement('div');
         const projectTitle = document.createElement('p');
+        const deleteIcon = document.createElement('i');
 
         project.classList.add('project');
         projectTitle.classList.add('project-title');
+        deleteIcon.classList.add('fa-solid');
+        deleteIcon.classList.add("fa-trash");
         projectTitle.textContent = inputProjectTitle.value;
         project.append(projectTitle);
+        project.append(deleteIcon);
         projectList.append(project);
         project.addEventListener('click', UI.chooseProject);
 
@@ -144,6 +172,7 @@ export default class UI {
     static submitTaskCreation() {
         const inputTaskTitle = document.querySelector('#input-task-title');
         const projectTitle = document.querySelector('#task-list-title').textContent;
+        const inputDueDate = document.querySelector('#input-task-date');
 
         if(!projectTitle) {
             alert('You must choose project');
@@ -156,7 +185,6 @@ export default class UI {
             return;
         }
 
-        const inputDueDate = document.querySelector('#input-task-date');
         //const priority = document.querySelector('input[name="task-priority"]:checked');
         //const description = document.querySelector('#input-task-description');
         
@@ -230,6 +258,12 @@ export default class UI {
     static hideTaskListTitle() {
         const taskListTitle = document.querySelector('#task-list-title');
         taskListTitle.style.display = 'none';
+    }
+
+    static deleteProject(e) {
+        const projectTitle = e.target.previousSibling.textContent;
+        StorageHandler.deleteProject(projectTitle);
+        UI.loadProjects();
     }
     
 }
