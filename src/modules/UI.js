@@ -4,9 +4,6 @@ import Task from "./Task";
 import { format } from "date-fns";
 
 export default class UI {
-    constructor() {
-
-    }
 
     static loadContent() {
         UI.loadProjects();
@@ -17,7 +14,7 @@ export default class UI {
     static loadProjects() {
         UI.hideProjects();
         const projectList = document.querySelector('.project-list');
-        const savedProjects = StorageHandler.getProjectList();          // returns array of objects of type Project
+        const savedProjects = StorageHandler.getProjectList();
 
         savedProjects.forEach(element => {
             const project = document.createElement('div');
@@ -52,19 +49,49 @@ export default class UI {
         }
 
         storedTasks.forEach(element => {
-            const task = document.createElement('div');
-            const taskTitle = document.createElement('p');
-            const deleteIcon = document.createElement('i');
-
-            task.classList.add('task');
-            taskTitle.classList.add('task-title');
-            deleteIcon.classList.add('fa-solid');
-            deleteIcon.classList.add("fa-trash");
-            taskTitle.textContent = element.title;
-            task.append(taskTitle);
-            task.append(deleteIcon);
-            taskList.append(task);
+            UI.loadTask(taskList, element);
         });
+        UI.initTaskCheckboxes();
+        UI.initDeleteTaskButtons();
+    }
+
+    static loadTask(taskList, task) {
+        const taskContainer = document.createElement('div');
+        const checkAndTitleContainer = document.createElement('div');
+        const dateAndDeleteContainer = document.createElement('div');
+        const taskTitle = document.createElement('p');
+        const dueDate = document.createElement('p');
+        const deleteIcon = document.createElement('i');
+        const checkIcon = document.createElement('i');
+
+        taskContainer.classList.add('task');
+        checkAndTitleContainer.classList.add('task-container');
+        dateAndDeleteContainer.classList.add('date-delete-container');
+        taskTitle.classList.add('task-title');
+        dueDate.classList.add('due-date');
+        deleteIcon.classList.add('fa-solid');
+        deleteIcon.classList.add("fa-trash");
+        checkIcon.classList.add('fa-regular');
+        checkIcon.classList.add('fa-square');
+        checkIcon.classList.add('task-checkbox');
+        taskTitle.textContent = task.title;
+        dueDate.textContent = task.dueDate;
+        checkAndTitleContainer.append(checkIcon);
+        checkAndTitleContainer.append(taskTitle);
+        dateAndDeleteContainer.append(dueDate);
+        dateAndDeleteContainer.append(deleteIcon);
+        if(task.isCompleted) {
+            UI.toggleCheckboxDisplay(checkIcon);
+        }
+        taskContainer.append(checkAndTitleContainer);
+        taskContainer.append(dateAndDeleteContainer);
+        taskList.append(taskContainer);
+    }
+
+    static toggleCheckboxDisplay(checkIcon) {
+        checkIcon.classList.toggle('fa-square');
+        checkIcon.classList.toggle('fa-square-check');
+        checkIcon.nextSibling.classList.toggle('crossed');
     }
 
     static hideTasks() {
@@ -73,17 +100,14 @@ export default class UI {
     }
 
     static initButtons() {
-        //UI.initFilterButtons();
         UI.initProjectButtons();
         UI.initTaskButtons();
+        UI.initMenuButton();
     }
 
-    static initFilterButtons() {
-        const btnAllTasks = document.querySelector('#btn-all-tasks');
-        const btnToday = document.querySelector('#btn-today-tasks');
-
-        btnAllTasks.addEventListener('click', () => UI.filterTaskList('allTasks'));
-        btnToday.addEventListener('click', () => UI.filterTaskList('todayTasks'));
+    static initMenuButton() {
+        const btnMenu = document.querySelector('.btn-menu');
+        btnMenu.addEventListener('click', UI.toggleMenu);
     }
 
     static initProjectButtons() {
@@ -120,6 +144,22 @@ export default class UI {
     static initDeleteTaskButtons() {
         const deleteBtns = document.querySelectorAll('.task .fa-trash');
         deleteBtns.forEach((btn) => {btn.addEventListener('click', UI.deleteTask)});
+    }
+
+    static initTaskCheckboxes() {
+        const checkboxes = document.querySelectorAll('.task-checkbox');
+        checkboxes.forEach((box) => {box.addEventListener('click', UI.toggleCheck)});
+    }
+
+    static toggleMenu() {
+        const menu = document.querySelector('.menu');
+        menu.classList.toggle('show-menu');
+    }
+
+    static toggleCheck(e) {
+        const projectTitle = document.querySelector('#task-list-title').textContent;
+        StorageHandler.toggleIsCompleted(projectTitle, e.target.nextSibling.textContent);
+        UI.toggleCheckboxDisplay(e.target);
     }
 
     static chooseProject(e) {
@@ -184,9 +224,6 @@ export default class UI {
             UI.hideAddTaskForm();
             return;
         }
-
-        //const priority = document.querySelector('input[name="task-priority"]:checked');
-        //const description = document.querySelector('#input-task-description');
         
         const dueDate = format(new Date(inputDueDate.value), 'dd/MM/yyyy');
         StorageHandler.saveTask(projectTitle, new Task(inputTaskTitle.value, dueDate,));
@@ -197,15 +234,9 @@ export default class UI {
 
     static cancelTaskCreation() {
         const inputTaskTitle = document.querySelector('#input-task-title');
-        //const inputTaskDescription = document.querySelector('#input-task-description');
 
         inputTaskTitle.textContent = '';
-        //inputTaskDescription.textContent = '';
         UI.hideAddTaskForm();
-    }
-
-    static filterTaskList(filterName) {
-        // TODO: filter tasks by date
     }
 
     static showAddProjectForm() {
@@ -241,13 +272,9 @@ export default class UI {
     static resetAddTaskForm() {
         const inputTaskTitle = document.querySelector('#input-task-title');
         const inputDueDate = document.querySelector('#input-task-date');
-        //const taskPriorityLowRadio = document.querySelector('#task-priority-low');
-        //const description = document.querySelector('#input-task-description');
 
         inputTaskTitle.value = '';
         inputDueDate.value = new Date().toISOString().slice(0, 10);
-        //taskPriorityLowRadio.checked = true;
-        //description.value = '';
     }
 
     static showTaskListTitle() {
@@ -264,6 +291,13 @@ export default class UI {
         const projectTitle = e.target.previousSibling.textContent;
         StorageHandler.deleteProject(projectTitle);
         UI.loadProjects();
+    }
+
+    static deleteTask(e) {
+        const projectTitle = document.querySelector('#task-list-title').textContent;
+        const taskTitle = e.target.previousSibling.lastChild.textContent;
+        StorageHandler.deleteTask(projectTitle, taskTitle);
+        UI.loadTasks(projectTitle);
     }
     
 }

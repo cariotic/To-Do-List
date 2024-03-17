@@ -2,8 +2,22 @@ export default class Task {
     constructor(title, dueDate) {
         this.title = title;
         this.dueDate = dueDate;
-        this.completed = false;
-        //this.priority = priority;
-        //this.description = description;
+        this.isCompleted = false;
+    }
+
+    getTitle() {
+        return this.title;
+    }
+
+    setTitle(title) {
+        this.title = title;
+    }
+
+    getIsCompleted() {
+        return this.isCompleted;
+    }
+
+    setIsCompleted(isCompleted) {
+        this.isCompleted = isCompleted;
     }
 }

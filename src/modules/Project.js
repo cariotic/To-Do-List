@@ -4,6 +4,18 @@ export default class Project {
         this.taskList = [];
     }
 
+    getTitle() {
+        return this.title;
+    }
+
+    setTitle(title) {
+        this.title = title;
+    }
+
+    getTaskList() {
+        return this.taskList;
+    }
+
     setTaskList(taskList) {
         this.taskList = taskList;
     }
