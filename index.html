@@ -12,19 +12,16 @@
 </head>
 <body>
     <header>
-        <i class="fa-solid fa-list-check"></i>
-        <h1 class="page-title">To-Do List</h1>
+        <div class="btn-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="logo">
+            <i class="fa-solid fa-list-check"></i>
+            <h1 class="page-title">To-Do List</h1>
+        </div>
     </header>
     <main>
         <nav class="menu">
-            <!-- <div class="category-section">
-                <div class="btn btn-task-category" id="btn-all-tasks">
-                    <p>All tasks</p>
-                </div>
-                <div class="btn btn-task-category" id="btn-today-tasks">
-                    <p>Today</p>
-                </div>
-            </div> -->
             <div class="project-section">
                 <h2 class="section-title" id="project-section-title">My Projects</h2>
                 <div class="project-list"></div>
@@ -53,19 +50,8 @@
             <form class="add-task-form">
                 <label for="input-task-title">Title</label>
                 <input type="text" id="input-task-title">
-                <!-- <div class="input-task-priority">
-                    <label>Priority</label>
-                    <input type="radio" name="task-priority" id="task-priority-low" value="low" checked>
-                    <label for="task-priority-low">low</label>
-                    <input type="radio" name="task-priority" id="task-priority-medium" value="medium">
-                    <label for="task-priority-medium">medium</label>
-                    <input type="radio" name="task-priority" id="task-priority-high" value="high">
-                    <label for="task-priority-high">high</label>
-                </div> -->
                 <label for="input-task-date">Due date</label>
                 <input type="date" id="input-task-date">
-                <!-- <label for="input-task-description">Description</label>
-                <input type="text" id="input-task-description"> -->
                 <div class="add-task-buttons">
                     <button type="button" id="btn-submit-task" class="btn btn-form">Add</button>
                     <button type="button" id="btn-cancel-task" class="btn btn-form">Cancel</button> 
@@ -74,9 +60,7 @@
         </div>
     </main>
     <footer>
-        <p>Created by
-            <a href="https://github.com/cariotic">cariotic</a>
-        </p>
+        <a class="fa-brands fa-github" href="https://github.com/cariotic"></a>
     </footer>
 </body>
 </html>
