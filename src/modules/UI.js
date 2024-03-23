@@ -142,7 +142,7 @@ export default class UI {
     }
 
     static initDeleteTaskButtons() {
-        const deleteBtns = document.querySelectorAll('.task .fa-trash');
+        const deleteBtns = document.querySelectorAll('.date-delete-container .fa-trash');
         deleteBtns.forEach((btn) => {btn.addEventListener('click', UI.deleteTask)});
     }
 
@@ -200,6 +200,7 @@ export default class UI {
         project.addEventListener('click', UI.chooseProject);
 
         UI.hideAddProjectForm();
+        UI.loadProjects();
     }
 
     static cancelProjectCreation() {
@@ -295,7 +296,7 @@ export default class UI {
 
     static deleteTask(e) {
         const projectTitle = document.querySelector('#task-list-title').textContent;
-        const taskTitle = e.target.previousSibling.lastChild.textContent;
+        const taskTitle = e.target.parentElement.previousSibling.lastChild.textContent;
         StorageHandler.deleteTask(projectTitle, taskTitle);
         UI.loadTasks(projectTitle);
     }
